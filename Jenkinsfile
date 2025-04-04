@@ -54,7 +54,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh "docker run --name edu-app --rm -d -p 8383:8080 ${env.DOCKERHUB_REPO}:latest"  // Run Docker container in detached mode
+                    sh "docker run --name techvista-app-con --rm -d -p 8800:8080 ${env.DOCKERHUB_REPO}:latest"  // Run Docker container in detached mode
                 }
             }
         }
