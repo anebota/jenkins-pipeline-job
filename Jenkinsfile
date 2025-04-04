@@ -27,7 +27,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn -version'  // Confirm Maven is available
-                sh 'mvn clean package'
+                sh sh '/usr/bin/mvn clean package'
             }
         }
 
