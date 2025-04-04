@@ -1,20 +1,24 @@
 pipeline {
-    agent { label 'agent1' }  // Replace 'wsl-agent' with the label of your agent
+    agent { label 'agent1' }
+
+    tools {
+        maven 'Maven 3.9.9'  // Ensure this name matches what's configured in Jenkins
+    }
 
     environment {
         GITHUB_REPO_URL = 'https://github.com/anebota/jenkins-pipeline-job.git'
-        BRANCH_NAME = 'main'  // Replace with your branch name if it's not 'main'
-        GITHUB_CREDENTIALS_ID = 'pipeline-creds'  // Replace with your Jenkins GitHub credentials ID
-        DOCKERHUB_CREDENTIALS_ID = 'jenkins-dockerhub-creds'  // Replace with your Jenkins Docker Hub credentials ID
-        DOCKERHUB_REPO = 'anebota/jenkins-pipeline-job'  // Replace with your Docker Hub repository
+        BRANCH_NAME = 'main'
+        GITHUB_CREDENTIALS_ID = 'pipeline-creds'
+        DOCKERHUB_CREDENTIALS_ID = 'jenkins-dockerhub-creds'
+        DOCKERHUB_REPO = 'anebota/jenkins-pipeline-job'
     }
 
     stages {
         stage('Agent Details') {
             steps {
                 echo "Running on agent: ${env.NODE_NAME}"
-                sh 'uname -a'  // Print system information
-                sh 'whoami'    // Print the current user
+                sh 'uname -a'
+                sh 'whoami'
             }
         }
 
@@ -26,36 +30,31 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean package'  // Simple Maven build
+                sh 'mvn -version'  // Confirm Maven is available
+                sh 'mvn clean package'
             }
         }
 
         stage('Docker Build') {
             steps {
-                script {
-                    sh 'docker --version'  // Verify Docker installation
-                    sh "docker build -t ${env.DOCKERHUB_REPO}:latest ."  // Build Docker image
-                }
+                sh 'docker --version'
+                sh "docker build -t ${env.DOCKERHUB_REPO}:latest ."
             }
         }
 
         stage('Docker Push') {
             steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: "${env.DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                        sh "docker push ${env.DOCKERHUB_REPO}:latest"
-                        sh 'docker logout'
-                    }
+                withCredentials([usernamePassword(credentialsId: "${env.DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                    sh "docker push ${env.DOCKERHUB_REPO}:latest"
+                    sh 'docker logout'
                 }
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                script {
-                    sh "docker run --name techvista-app-con --rm -d -p 8800:8080 ${env.DOCKERHUB_REPO}:latest"  // Run Docker container in detached mode
-                }
+                sh "docker run --name techvista-app-con --rm -d -p 8800:8080 ${env.DOCKERHUB_REPO}:latest"
             }
         }
     }
