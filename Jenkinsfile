@@ -4,9 +4,9 @@ pipeline {
     environment {
         GITHUB_REPO_URL = 'https://github.com/anebota/jenkins-pipeline-job.git'
         BRANCH_NAME = 'main'  // Replace with your branch name if it's not 'main'
-        GITHUB_CREDENTIALS_ID = 'vin_github_cred'  // Replace with your Jenkins GitHub credentials ID
-        DOCKERHUB_CREDENTIALS_ID = 'jenkins-docker-cred'  // Replace with your Jenkins Docker Hub credentials ID
-        DOCKERHUB_REPO = 'vlonje20/ms-solutions-app'  // Replace with your Docker Hub repository
+        GITHUB_CREDENTIALS_ID = 'pipeline-creds'  // Replace with your Jenkins GitHub credentials ID
+        DOCKERHUB_CREDENTIALS_ID = 'jenkins-dockerhub-creds'  // Replace with your Jenkins Docker Hub credentials ID
+        DOCKERHUB_REPO = 'anebota/jenkins-pipeline-job'  // Replace with your Docker Hub repository
     }
 
     stages {
@@ -54,7 +54,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh "docker run --name ms-solutions-app --rm -d -p 8383:8080 ${env.DOCKERHUB_REPO}:latest"  // Run Docker container in detached mode
+                    sh "docker run --name edu-app --rm -d -p 8383:8080 ${env.DOCKERHUB_REPO}:latest"  // Run Docker container in detached mode
                 }
             }
         }
