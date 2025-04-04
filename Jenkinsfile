@@ -1,10 +1,6 @@
 pipeline {
     agent { label 'agent1' }
 
-    tools {
-        maven 'Maven 3.9.9'  // Ensure this name matches what's configured in Jenkins
-    }
-
     environment {
         GITHUB_REPO_URL = 'https://github.com/anebota/jenkins-pipeline-job.git'
         BRANCH_NAME = 'main'
