@@ -4,7 +4,7 @@ pipeline {
         GITHUB_REPO_URL = 'https://github.com/anebota/techpulse.git'
         BRANCH_NAME = 'main'
         GITHUB_CREDENTIALS_ID = 'jenkins-github-creds'
-        DOCKERHUB_CREDENTIALS_ID = 'jenkins-dockerhub-creds'
+        DOCKERHUB_CREDENTIALS_ID = 'jenkins-dockerhub-credentials-PAT'
         DOCKERHUB_REPO = 'anebota/jenkins-job-repo'
     }
     stages {
