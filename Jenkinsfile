@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker --version'
-                    sh "docker build -t ${env.DOCKERHUB_REPO}: latest ."
+                    sh "docker build -t ${env.DOCKERHUB_REPO}:latest ."
                 }
             }
         }
